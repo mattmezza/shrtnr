@@ -1,0 +1,33 @@
+{
+    "name": "mattmezza/php-my-url-shrtnr",
+    "description": "A simple URL shortener component to integrate into existing projects",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "vlucas/phpdotenv": "^2.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matteo Merola",
+            "email": "mattmezza@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Shrtnr\\": "src/",
+            "Shrtnr\\DAO\\": "src/dao",
+            "Shrtnr\\Exception\\": "src/exceptions/"
+        },
+        "files": [
+            "src/utils.php"
+        ]
+    },
+    "require": {
+        "php": "^7.0"
+    },
+    "scripts": {
+        "migrate": "php src/migrate.php",
+        "test": "./vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/Shrtnr.php"
+    }
+}
