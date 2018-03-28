@@ -1,6 +1,7 @@
 {
-    "name": "mattmezza/php-my-url-shrtnr",
-    "description": "A simple URL shortener component to integrate into existing projects",
+    "name": "mattmezza/shrtnr",
+    "description": "Your super simple and fast private goo·gl/bit·ly system, privately hosted wherever you want, completely frontend agnostic.",
+    "version": "0.0.1",
     "type": "library",
     "require-dev": {
         "phpunit/phpunit": "^7.0",
