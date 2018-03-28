@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Shrtnr\DAO;
 
 use Shrtnr\Click;
+use Shrtnr\Rule;
 
 class Clicks
 {
@@ -37,25 +38,25 @@ class Clicks
         return $clicks;
     }
 
-    public function add(string $from, string $to, int $ruleId, string $ip = null) : Click
+    public function add(Rule $rule, string $ip = null) : Click
     {
         $now = new \DateTime();
         $stmt = $this->db->prepare("
             INSERT INTO clicks (`from`,`to`,rule_id,clicked_at,`ip`) VALUES (?,?,?,?,?)
         ");
         $stmt->execute([
-            $from,
-            $to,
-            $ruleId,
+            $rule->getFrom(),
+            $rule->getTo(),
+            $rule->getId(),
             $now->format("Y-m-d H:i:s"),
             $ip
             ]);
-        $id = $this->db->lastInsertId();
+        $id = intval($this->db->lastInsertId());
         $click = new Click(
             $now,
-            intval($ruleId),
-            $to,            
-            $from,
+            $rule->getId(),
+            $rule->getTo(),            
+            $rule->getFrom(),
             $ip
         );
         $click->setId($id);

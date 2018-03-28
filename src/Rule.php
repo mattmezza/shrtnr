@@ -34,7 +34,7 @@ class Rule
     /**
      * Get the value of from
      */ 
-    public function getFrom()
+    public function getFrom() : string
     {
         return $this->from;
     }
@@ -42,7 +42,7 @@ class Rule
     /**
      * Get the value of to
      */ 
-    public function getTo()
+    public function getTo() : string
     {
         return $this->to;
     }
@@ -50,7 +50,7 @@ class Rule
     /**
      * Get the value of createdAt
      */ 
-    public function getCreatedAt()
+    public function getCreatedAt() : \DateTime
     {
         return $this->createdAt;
     }
@@ -58,7 +58,7 @@ class Rule
     /**
      * Get the value of enabled
      */ 
-    public function getEnabled()
+    public function getEnabled() : bool
     {
         return $this->enabled;
     }
@@ -66,7 +66,7 @@ class Rule
     /**
      * Get the value of modifiedAt
      */ 
-    public function getModifiedAt()
+    public function getModifiedAt() : \DateTime
     {
         return $this->modifiedAt;
     }
@@ -76,7 +76,7 @@ class Rule
      *
      * @return  self
      */ 
-    public function setId($id)
+    public function setId(int $id) : self
     {
         $this->id = $id;
 
@@ -86,7 +86,7 @@ class Rule
     /**
      * Get the value of id
      */ 
-    public function getId()
+    public function getId() : int
     {
         return intval($this->id);
     }

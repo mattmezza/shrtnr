@@ -45,7 +45,7 @@ class Click
     /**
      * Get the click datetime
      */ 
-    public function getClickedAt()
+    public function getClickedAt() : \DateTime
     {
         return $this->clickedAt;
     }
@@ -53,7 +53,7 @@ class Click
     /**
      * Get the shortened url the final user clicked
      */ 
-    public function getRuleId()
+    public function getRuleId() : int
     {
         return $this->ruleId;
     }
@@ -61,7 +61,7 @@ class Click
     /**
      * Get the final url where the final user is redirected
      */ 
-    public function getTo()
+    public function getTo() : string
     {
         return $this->to;
     }
@@ -69,7 +69,7 @@ class Click
     /**
      * Get the id of the single click
      */ 
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -79,7 +79,7 @@ class Click
      *
      * @return  self
      */ 
-    public function setId($id)
+    public function setId(int $id) : self
     {
         $this->id = $id;
 
@@ -89,7 +89,7 @@ class Click
     /**
      * Get the client IP
      */ 
-    public function getIp()
+    public function getIp() : string
     {
         return $this->ip;
     }

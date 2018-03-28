@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Shrtnr\DAO\Rules;
+use Shrtnr\DAO\Clicks;
 use Shrtnr\Rule;
 use Shrtnr\Shrtnr;
 use Shrtnr\Exception\AddRuleException;
@@ -12,6 +13,7 @@ class ShrtnrTest extends TestCase
     private $db;
     private $shrtnr;
     private $rulesMgr;
+    private $clicksMgr;
 
     public function setUp()
     {
@@ -20,6 +22,7 @@ class ShrtnrTest extends TestCase
         $stmt->execute([]);
         $this->shrtnr = new Shrtnr();
         $this->rulesMgr = new Rules();
+        $this->clicksMgr = new Clicks();
     }
 
     public function testAddRule()
@@ -54,7 +57,25 @@ class ShrtnrTest extends TestCase
     public function testNoRule()
     {
         $this->expectException(NoRuleException::class);
-        $to = $this->shrtnr->getTo("/sburun");
+        $to = $this->shrtnr->shrtn("/sburun");
+    }
+
+    public function testShorten()
+    {
+        $ip = "192.168.1.1";
+        $addedRule = $this->rulesMgr->add(
+            "/corsi",
+            "https://www.corsi.it",
+            "matteo"
+        );
+        $to = $this->shrtnr->shrtn("/corsi", $ip);
+        $this->assertEquals("https://www.corsi.it", $to);
+        $stmt = $this->db->prepare("select * from clicks where `from` = ?");
+        $stmt->execute(["/corsi"]);
+        $rows = $stmt->fetchAll();
+        $this->assertEquals(1, count($rows));
+        $this->assertEquals("https://www.corsi.it", $rows[0]["to"]);
+        $this->assertEquals($ip, $rows[0]["ip"]);
     }
 
     public function testRuleOkFirstClick()
@@ -66,8 +87,10 @@ class ShrtnrTest extends TestCase
             "matteo"
         );
         $rule = $this->rulesMgr->getByFromUrl("/corsi");
-        $this->shrtnr->registerClick($rule, $ip);
-
+        $this->clicksMgr->add(
+            $rule,
+            $ip
+        );
         $stmt = $this->db->prepare("select * from clicks where `from` = ?");
         $stmt->execute(["/corsi"]);
         $rows = $stmt->fetchAll();
@@ -86,8 +109,14 @@ class ShrtnrTest extends TestCase
             "matteo"
         );
         $rule = $this->rulesMgr->getByFromUrl("/corsi");
-        $this->shrtnr->registerClick($rule, $ip);
-        $this->shrtnr->registerClick($rule, $ip2);
+        $this->clicksMgr->add(
+            $rule,
+            $ip
+        );
+        $this->clicksMgr->add(
+            $rule,
+            $ip2
+        );
         $stmt = $this->db->prepare("select * from rules where `from` = ?");
         $stmt->execute(["/corsi"]);
         $rows = $stmt->fetchAll();
@@ -108,7 +137,7 @@ class ShrtnrTest extends TestCase
             "https://www.corsi.it",
             "matteo"
         );
-        $this->shrtnr->relink($addedRule, "/corsi.it", "https://www.corsi.it/");
+        $this->rulesMgr->edit($addedRule->getId(), "/corsi.it", "https://www.corsi.it/");
         $stmt = $this->db->prepare("select * from rules where `id` = ?");
         $stmt->execute([$addedRule->getId()]);
         $rows = $stmt->fetchAll();

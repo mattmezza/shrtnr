@@ -57,7 +57,7 @@ class Rules
         if (!$res) {
             throw new AddRuleException();
         }
-        $id = $this->db->lastInsertId();
+        $id = intval($this->db->lastInsertId());
         
         $rule = new Rule(
             $userId,
@@ -90,7 +90,7 @@ class Rules
             ($row["enabled"] == 1 ? true : false),
             \DateTime::createFromFormat("Y-m-d H:i:s", $row["created_at"])
         );
-        $rule->setId($row["id"]);
+        $rule->setId(intval($row["id"]));
         return $rule;
     }
 

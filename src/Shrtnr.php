@@ -19,26 +19,23 @@ class Shrtnr
         $this->clicksMgr = new Clicks();
     }
 
-    public function getTo(string $from) : string
+    /**
+     * Given a URI gives back the destination URL of the rule matching 
+     * with the `from` field (or throws a `NoRuleException` if no rule 
+     * is associated with the passed URI)
+     * 
+     * @param   string  $from   The URI from which to be redirected
+     * @param   string  $ip     The IP address of the client
+     * 
+     * @throws  NoRuleException     Thrown when there is no matching rule to apply for give URI $from
+     * 
+     * @return  string  The URL where to redirect the client
+     */
+    public function shrtn(string $from, string $ip = null) : string
     {
         $rule = $this->rulesMgr->getByFromUrl($from);
+        $click = $this->clicksMgr->add($rule, $ip);
         return $rule->getTo();
-    }
-
-    public function registerClick(Rule $rule, string $ip = null) : Click
-    {
-        $registeredClick = $this->clicksMgr->add(
-            $rule->getFrom(),
-            $rule->getTo(),
-            intval($rule->getId()),
-            $ip
-        );
-        return $registeredClick;
-    }
-
-    public function relink(Rule $rule, string $newFrom, string $newTo) : void
-    {
-        $this->rulesMgr->edit(intval($rule->getId()), $newFrom, $newTo);
     }
 
 }
