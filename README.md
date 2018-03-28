@@ -1,12 +1,40 @@
-Shrtnr
+shrtnr
 =====
 
-Your super simple and fast private goo.gl/bit.ly system, privately hosted wherever you want, completely frontend agnostic.
+Your super simple and fast private goo·gl/bit·ly system, privately hosted wherever you want, completely frontend agnostic.
 
 ## Installation
 
 - `composer require mattmezza/shrtnr`
 - define the env variables needed and set up the DB (check below)
+
+## Usage
+
+The `Shrtnr` class offers a very simple API:
+
+- `shrtn(string $from, string $ip = null) : string` -> Given a URI gives back the destination URL of the rule matching with the `from` field (or throws a `NoRuleException` if no rule is associated with the passed URI)
+
+Can be used like this (in this example we forward the query string to the destination URL):
+
+```php
+$both = explode("?", $_SERVER["REQUEST_URI"]);
+$uri = $both[0];
+$shrtnr = new Shrtnr();
+try {
+    $to = $shrtnr->shrtn($uri);
+    if (count($both) > 1) {
+        $to .= "?" . $_SERVER["QUERY_STRING"];
+    }
+    header("Location: $to");
+} catch (NoRuleException $e) {
+    die($e->getMessage());
+}
+
+```
+
+## Admin usage
+
+To add, edit, remove and search for clicks and rules you can check out the DAOs `Clicks` and `Rules` that are exposing a couple of methods for CRUD ops.
 
 ## DB
 
@@ -50,16 +78,6 @@ It is the rule that instructs the system what to do for a specific URI. It has i
 ### Click
 
 It represents an applied rule, it is created when somebody goes to the URI and gets redirected to the matching destination. It reports info about the IP address and references the applied rule.
-
-## Usage
-
-The `Shrtnr` class offers a very simple API:
-
-- `shrtn(string $from, string $ip = null) : string` -> Given a URI gives back the destination URL of the rule matching with the `from` field (or throws a `NoRuleException` if no rule is associated with the passed URI)
-
-## Admin usage
-
-To add, edit, remove and search for clicks and rules you can check out the DAOs `Clicks` and `Rules` that are exposing a couple of methods for CRUD ops.
 
 ## Development
 
