@@ -109,7 +109,7 @@ class Rules
             ($row["enabled"] == 1 ? true : false),
             \DateTime::createFromFormat("Y-m-d H:i:s", $row["created_at"])
         );
-        $rule->setId($row["id"]);
+        $rule->setId(intval($row["id"]));
         return $rule;
     }
 
