@@ -19,10 +19,10 @@ class Rules
 
     public function getAll(int $page = 0, int $perpage = 20) : array
     {
-        $limitTo = $page * $perpage;
+        $limitFrom = $page * $perpage;
         $stmt = $this->db->prepare("
-            SELECT * FROM rules ORDER BY modified_at,created_at DESC LIMIT $page,$limitTo
-        ");
+            SELECT * FROM rules ORDER BY modified_at,created_at DESC LIMIT $limitFrom,$perpage
+        "); 
         $stmt->execute([]);
         $rows = $stmt->fetchAll();
         $rules = [];
