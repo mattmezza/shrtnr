@@ -10,9 +10,9 @@ class Clicks
 {
     private $db;
 
-    public function __construct()
+    public function __construct($dsn = null, $dbUser = null, $dbPass = null)
     {
-        $this->db = getDB();
+        $this->db = getDB($dsn, $dbUser, $dbPass);
     }
 
     public function getAll(int $page = 0, int $perpage = 20) : array
